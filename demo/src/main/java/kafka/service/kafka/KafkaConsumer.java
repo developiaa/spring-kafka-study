@@ -26,4 +26,11 @@ public class KafkaConsumer {
             e.printStackTrace();
         }
     }
+
+    @KafkaListener(topics = "quickstart-events", id = "quickstart-id")
+    public void listen(String message) {
+        log.info("=============");
+        log.info("Kafka Consumer consume message : {}", message);
+        log.info("=============");
+    }
 }
