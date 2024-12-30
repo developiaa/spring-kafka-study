@@ -16,22 +16,25 @@ public class KafkaTopicConfiguration {
         return AdminClient.create(kafkaAdmin.getConfigurationProperties());
     }
 
-    @Bean
-    public NewTopic topic() {
-        // 기본적인 디폴트 설정으로 생성
-        return TopicBuilder.name("clip2")
-                .build();
-    }
+//    @Bean
+//    public NewTopic topic() {
+//        // 기본적인 디폴트 설정으로 생성
+//        return TopicBuilder.name("clip2")
+//                .build();
+//    }
 
     @Bean
     public KafkaAdmin.NewTopics topics() {
         return new KafkaAdmin.NewTopics(
-                TopicBuilder.name("clip2-part1").build(),
+//                TopicBuilder.name("clip2-part1").build(),
                 TopicBuilder.name("clip2-part2")
                         .partitions(3) // 내부 코드에서 확인 - 다른 설정은 안바뀌고 파티션의 개수만 변경 가능
                         .replicas(1)
                         .config(TopicConfig.RETENTION_MS_CONFIG, String.valueOf(1000 * 60 * 60))
-                        .build()
+                        .build(),
+                TopicBuilder.name("clip3-bytes").build(),
+                TopicBuilder.name("clip3-request").build(),
+                TopicBuilder.name("clip3-replies").build()
         );
     }
 }
