@@ -1,3 +1,3 @@
 rootProject.name = 'kafka'
 
-include ("demo", "checkout")
+include ("demo", "checkout", "kafka-streams")
