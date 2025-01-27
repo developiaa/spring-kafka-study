@@ -1,5 +1,6 @@
 package kafka.producer;
 
+import kafka.model.Animal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -21,12 +22,15 @@ import java.util.concurrent.TimeoutException;
 @Service
 public class ClipProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, Animal> kafkaJsonTemplate;
     private final RoutingKafkaTemplate routingKafkaTemplate;
     private final ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate;
 
-    public ClipProducer(KafkaTemplate<String, String> kafkaTemplate, RoutingKafkaTemplate routingKafkaTemplate,
+    public ClipProducer(KafkaTemplate<String, String> kafkaTemplate, KafkaTemplate<String, Animal> kafkaJsonTemplate,
+                        RoutingKafkaTemplate routingKafkaTemplate,
                         ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
+        this.kafkaJsonTemplate = kafkaJsonTemplate;
         this.routingKafkaTemplate = routingKafkaTemplate;
         this.replyingKafkaTemplate = replyingKafkaTemplate;
     }
@@ -74,5 +78,9 @@ public class ClipProducer {
         RequestReplyFuture<String, String, String> replyFuture = replyingKafkaTemplate.sendAndReceive(record);
         ConsumerRecord<String, String> consumerRecord = replyFuture.get(10, TimeUnit.SECONDS);
         log.info(consumerRecord.value());
+    }
+
+    public void async(String topic, Animal animal) {
+        kafkaJsonTemplate.send(topic, animal);
     }
 }
